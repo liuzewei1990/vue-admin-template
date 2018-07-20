@@ -1,0 +1,25 @@
+$browser-default-font-size: 10px !default;//变量的值可以根据自己需求定义
+html {
+    font-size : 12px;
+}
+@media only screen and (min-width: 320px){
+    html {
+        font-size: $browser-default-font-size !important;
+    }
+}
+@media only screen and (min-width: 375px){
+    html {
+        // font-size: 12px !important;
+        font-size: 12px !important
+    }
+}
+@media only screen and (min-width: 414px){
+    html {
+        font-size: 14px !important;
+    }
+}
+@media only screen and (min-width: 768px){
+    html {
+        font-size: 12px !important; 
+    }
+}

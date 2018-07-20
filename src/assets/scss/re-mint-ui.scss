@@ -1,0 +1,50 @@
+
+@import "./base.scss";
+@media screen and (max-width: 500px) {
+  .v-modal{
+      z-index:2999 !important;
+  }
+  .mint-toast,
+  .mint-msgbox-wrapper,
+  .mint-actionsheet,
+  .mint-datetime,
+  .mint-indicator,
+  .mint-indicator-wrapper,
+  .mint-indicator-mask{
+      z-index:3000 !important;
+  }
+
+  .mint-header{
+    background-color:$globalBackroundColor;
+    font-size: 35*$rem;
+    height:100*$rem;
+  }
+
+  .mint-tabbar {
+    color: #878d99;
+    .mint-tab-item-icon {
+      width: 50*$rem;
+      height: 50*$rem;
+      margin: 0 auto 5*$rem;
+    }
+    .mint-tab-item-label {
+      font-size: 30*$rem;
+    }
+  }
+
+  .mint-cell{
+    .mint-cell-wrapper{
+      font-size: 30*$rem;
+    }
+  }
+
+  .mint-cell-title {
+    span {
+      // white-space: nowrap;
+      // padding-right: 10px;
+    }
+  }
+  .mint-cell-value{
+    line-height: 32*$rem;
+  }
+}

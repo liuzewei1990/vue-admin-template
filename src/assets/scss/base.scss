@@ -1,0 +1,8 @@
+$rem:0.04rem;
+$globalBackroundColor:#001529;
+$globalColor:#606266;
+$active-color:#00c1df;
+$browser-default-font-size: 10px !default;//变量的值可以根据自己需求定义
+@function pxTorem($px){//$px为需要转换的字号
+    @return $px /2 / $browser-default-font-size * 1rem;
+}
