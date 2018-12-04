@@ -21,10 +21,10 @@
       <!-- 通知 -->
       <el-popover popper-class="msg-tooltip" placement="bottom-start" ref="popover2" width="300" trigger="click">
         <el-tabs v-model="msgName" @tab-click="msgFn">
-          <el-tab-pane :label="'通知 ('+noticeCount+')'" name="notice">
+          <el-tab-pane :label="$t('nav.noticeText')+'('+noticeCount+')'" name="notice">
             <div v-if="noticeCount>0?false:true" class="nomsg-box">
               <img :src="require('@src/assets/images/noNotice-pc.png')" alt="">
-              <p>你已查看所有通知</p>
+              <p>{{$t("nav.noNoticeText")}}</p>
             </div>
             <div v-if="noticeCount>0?true:false" class="msg-list">
               <div v-for="(item,index) in noticeList" :key="index" class="list notice">
@@ -44,13 +44,21 @@
         </el-tabs>
       </el-popover>
 
-      <div v-popover:popover2 title="信息" class="hover-back message-box">
+      <div v-popover:popover2 :title="$t('nav.noticeText')" class="hover-back message-box">
         <el-badge :value="noticeCount" :max="999" class="item" id="messageIcon">
           <span class="icon-news"></span>
         </el-badge>
       </div>
 
       <myp-admin-operation></myp-admin-operation>
+
+      <el-dropdown @command="command">
+        <span class="el-dropdown-link">{{{zh:"中文",en:"English"}[$i18n.locale]}}</span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="zh">中文</el-dropdown-item>
+          <el-dropdown-item command="en">English</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
 
   </div>
@@ -276,6 +284,10 @@ export default {
     },
   },
   methods: {
+    command(e) {
+      this.$i18n.locale = e;
+      localStorage.setItem("lang", e);
+    },
     isCollapsefn() {
       this.$store.commit("SidebarHandle");
     },

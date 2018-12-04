@@ -1,6 +1,5 @@
 console.log("环境变量：", process.env.NODE_ENV)
 console.log("VUE_APP_CURRENTMODE变量：", process.env.VUE_APP_CURRENTMODE)
-
 const path = require('path')
 module.exports = {
 
@@ -8,7 +7,8 @@ module.exports = {
      * 配置:打包后要部署的位置
      * 根据 测试环境 或 生产环境配置不同的部署目录
     */
-    baseUrl: (process.env.NODE_ENV === 'production' && '/') || (process.env.NODE_ENV === 'productionTest' && './') || '',
+    baseUrl: (process.env.VUE_APP_CURRENTMODE === 'production' && '/') || (process.env.VUE_APP_CURRENTMODE === 'productionTest' && './') || '',
+
 
     /**
      * 配置:指定打包时输出的目录 默认dist
@@ -77,7 +77,16 @@ module.exports = {
             //     }
             // ]
         },
-        plugins: []
+        plugins: [
+        ]
+    },
+    chainWebpack: (config) => {
+
+        //添加构建报告插件
+        if (process.env.npm_config_report) {
+            var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+            config.plugin("webpack-report").use(BundleAnalyzerPlugin, [{}]);
+        }
     },
 
     /**
@@ -114,18 +123,15 @@ module.exports = {
         https: false,
         hotOnly: false,
         //配置跨域处理,只有一个代理
-        //proxy: 'http://localhost:4000',
+        proxy: 'https://tm.yeepiao.com',
         //配置跨域处理,多个代理
-        proxy: {
-            '/api': {
-                target: 'http://127.0.0.1:8012',
-                changeOrigin: true
-            },
-            '/api2': {
-                target: 'http://127.0.0.1:8012',
-                changeOrigin: true
-            }
-        }
+        // disableHostCheck: true,
+        // proxy: {
+        //     '/api': {
+        //         target: 'http://118.190.149.38:8088',
+        //         changeOrigin: false
+        //     }
+        // }
     },
 
     /**

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "vue-cli-service serve --mode development",
-    "build": "vue-cli-service build --mode production",
+    "build": "vue-cli-service build --mode production ",
     "build:test": "vue-cli-service build --mode productionTest"
   },
   "dependencies": {
@@ -12,8 +12,10 @@
     "element-ui": "^2.4.4",
     "iscroll": "^5.2.0",
     "jquery": "^3.3.1",
+    "js-md5": "^0.7.3",
     "screenfull": "^3.3.2",
     "vue": "^2.5.16",
+    "vue-i18n": "^8.0.0",
     "vue-iscroll-view": "^1.0.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
@@ -23,6 +25,7 @@
     "@vue/cli-service": "^3.0.0-rc.5",
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
-    "vue-template-compiler": "^2.5.16"
+    "vue-template-compiler": "^2.5.16",
+    "webpack-bundle-analyzer": "^2.13.1"
   }
 }

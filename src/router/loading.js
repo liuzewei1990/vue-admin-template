@@ -1,17 +1,12 @@
 import { Loading } from 'element-ui';
+import store from '@src/vuex';
 let loading = {};
 export default (flag) => {
     console.log("loding", flag)
     if (flag) {
-        loading = Loading.service({
-            lock: true,
-            text: 'Loading',
-            spinner: 'el-icon-loading',
-            // background: 'rgba(0, 0, 0, 0.7)'
-        });
-
+        store.state.loadingBar = 100;
     } else {
-        loading.close();
+        store.state.loadingBar = 0;
     }
 }
 

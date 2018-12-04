@@ -4,7 +4,7 @@ const acceptMessage = {
         // 消息数量
         messageCount: 0,
         // 通知数量
-        noticeCount: 10,
+        noticeCount: 0,
         noticeData: []
     },
     getters: {

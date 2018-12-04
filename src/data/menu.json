@@ -1,43 +1,15 @@
 [
   {
     "menuCode": "order",
-    "menuName": "交易管理",
-    "url": "",
-    "parentCode": "root",
-    "isParent": "TRUE",
+    "menuName": "退款管理",
     "child": [
       {
-        "menuCode": "orderQuery",
-        "menuName": "订单查询",
-        "url": "/page/orderQuery/orderQuery.html",
-        "parentCode": "order",
-        "isParent": "FALSE",
-        "child": []
-      }
-    ]
-  },
-  {
-    "menuCode": "userInfo",
-    "menuName": "我的信息",
-    "url": null,
-    "parentCode": "root",
-    "isParent": "TRUE",
-    "child": [
-      {
-        "menuCode": "customerInfo",
-        "menuName": "商户信息",
-        "url": "/page/enterprise/enterpriseSupply.html",
-        "parentCode": "userInfo",
-        "isParent": "FALSE",
-        "child": []
+        "menuCode": "refund",
+        "menuName": "交易退款"
       },
       {
-        "menuCode": "productInfo",
-        "menuName": "产品费率",
-        "url": "/page/enterprise/enterpriseSupply.html",
-        "parentCode": "userInfo",
-        "isParent": "FALSE",
-        "child": []
+        "menuCode": "refundQuery",
+        "menuName": "退款查询"
       }
     ]
   }

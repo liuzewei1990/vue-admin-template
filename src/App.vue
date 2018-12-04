@@ -1,5 +1,8 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <el-progress :percentage="$store.state.loadingBar" :stroke-width="2" :show-text="false"></el-progress>
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>

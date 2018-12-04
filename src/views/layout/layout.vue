@@ -57,8 +57,10 @@ export default {
 }
 .el-main.myp-el-main {
   position: relative;
-  padding: 0px !important;
+  // padding: 0px !important;
   text-align: left;
+  padding: 20px;
+  box-sizing: border-box;
 }
 .layout-full-page {
   height: 100vh;

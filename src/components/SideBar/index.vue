@@ -2,18 +2,18 @@
   <!-- layout 左侧菜单区域 -->
   <div class="aside-box">
     <div class="scroll-view-box">
-      <el-menu class="el-menu-vertical" :unique-opened="true" text-color="#878d99" background-color="#001529" :router="isrouter" :default-openeds="defaultOpeneds" :default-active="defaultActive" @open="handleOpen" @close="handleClose" @select="handleSelect" :collapse="isCollapse">
+      <el-menu class="el-menu-vertical" :collapse-transition="false" :unique-opened="true" text-color="#878d99" background-color="#001529" :router="isrouter" :default-openeds="defaultOpeneds" :default-active="defaultActive" @open="handleOpen" @close="handleClose" @select="handleSelect" :collapse="isCollapse">
         <!-- <el-menu  :show-timeout="200" :hide-timeout="200" class="el-menu-vertical" :unique-opened="true" text-color="#878d99" :router="isrouter" :default-openeds="defaultOpeneds" :default-active="defaultActive" @open="handleOpen" @close="handleClose" @select="handleSelect" :collapse="isCollapse" > -->
         <div :class="'logo-box'" ref="logoBox">
           <div class="img-box">
             <img :src="require('@src/assets/images/logo.png')" alt="">
           </div>
           <h1 v-if="!isCollapse" :class="'home-title'">
-            <router-link to="/home">Admin管理系统</router-link>
+            <router-link to="/home">{{$t('logo.title')}}</router-link>
           </h1>
         </div>
         <!-- <iscroll-view class="scroll-view" ref="iscroll" :options="iscrollOptions"> -->
-        <el-submenu v-for="(item, index) in menuList" :index="item.menuCode" :key="index">
+        <el-submenu v-for="(item, index) in $t('menu')" :index="item.menuCode" :key="index">
           <template slot="title">
             <i :class="'icon icon-'+item.menuCode"></i>
             <!-- <span v-if="!isCollapse" slot="title">{{item.menuName}}</span> -->
@@ -170,7 +170,7 @@ export default {
   data() {
     //密码修改表单内容
     return {
-      defaultActive: "", //
+      defaultActive: "refundQuery", //
       defaultOpeneds: [],
       isrouter: true, // 开启路由
       iscrollOptions: {

@@ -1,16 +1,13 @@
 import axios from "axios";
 import qs from "qs";
-import router from '../router'
 
 
 //允许跨域
 // axios.defaults. ;
 //默认axios不发送cookie，需要全局设置以下项，允许跨域发送cookie。
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 //全局请求拦截器
 axios.interceptors.request.use(function (config) {
-    if (window.isMobile == "App") {
-    }
     return config;
 }, function (error) {
     return Promise.reject(error);
@@ -67,7 +64,22 @@ axios.interceptors.response.use(function (response) {
 })
 
 export default {
-    post: function (baseURL, url, data, param) {
+    postJson: function (baseURL, url, data, headers) {
+        return axios({
+            method: "post",
+            url: url,
+            baseURL: baseURL,
+            data: data,
+            timeout: 10000,
+            headers: {
+                // "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "X-Requested-With": "XMLHttpRequest",
+                "Content-Type": "application/json",
+                ...headers
+            }
+        })
+    },
+    post: function (baseURL, url, data, headers) {
         return axios({
             method: "post",
             url: url,
@@ -75,54 +87,22 @@ export default {
             data: qs.stringify(data),
             timeout: 10000,
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-            },
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+                "X-Requested-With": "XMLHttpRequest",
+                ...headers
+            }
         })
     },
-    get: function (baseURL, url, params) {
+    get: function (baseURL, url, params, headers) {
         return axios({
             method: "GET",
             url: url,
             baseURL: baseURL,
             params: params,
             timeout: 10000,
-            headers: {}
-        })
-    },
-    delete: function (baseURL, url, params) {
-        return axios({
-            method: "DELETE",
-            url: url,
-            baseURL: baseURL,
-            params: params,
-            timeout: 10000,
-        })
-    },
-    put: function (baseURL, url, params) {
-        return axios({
-            method: "PUT",
-            url: url,
-            baseURL: baseURL,
-            params: params,
-            timeout: 10000,
-        })
-    },
-    patch: function (baseURL, url, params) {
-        return axios({
-            method: "PATCH",
-            url: url,
-            baseURL: baseURL,
-            // params: params,
-            data: qs.stringify(params),
-            timeout: 10000
-        })
-    },
-    delete: function (baseURL, url, params) {
-        return axios({
-            method: "DELETE",
-            url: url + '/' + params,
-            baseURL: baseURL,
-            timeout: 10000
+            headers: {
+                ...headers
+            }
         })
     }
 }

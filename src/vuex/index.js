@@ -8,8 +8,18 @@ import acceptMessage from "@src/vuex/acceptMessage";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    strict: true,
-    state: {},
+    strict: false,
+    state: {
+        loadingBar: 0,
+        md5Key: "RSGUVWXYZ0123456",
+        //退货订单号
+        refundMerOrderNo: "",
+        publicParams: {
+            version: "1.0.0",
+            customerNo: "",//20034585
+            companyNo: "10077777"
+        }
+    },
     getters: {},
     mutations: {},
     actions: {},

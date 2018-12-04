@@ -8,16 +8,16 @@
           <div class="logo-box">
             <img src="../../assets/images/logo.png" alt="">
           </div>
-          <div class="slogen-box">Admin管理系统</div>
+          <div class="slogen-box">{{$t("login.title")}}</div>
         </header>
         <!-- form start -->
         <div class="login-form">
           <el-form v-if="loginVisible" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="top" label-width="100px" class="demo-ruleForm form-r">
             <el-form-item prop="username">
-              <el-input class="input-reset" v-model="ruleForm.username" prefix-icon placeholder="请输入易票账号/手机号"></el-input>
+              <el-input class="input-reset" v-model="ruleForm.username" prefix-icon :placeholder="$t('login.form_username')" name="username" auto-complete="on"></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input class="input-reset" v-model="ruleForm.password" placeholder="请输入密码" type="password"></el-input>
+              <el-input class="input-reset" v-model="ruleForm.password" :placeholder="$t('login.form_pass')" type="password" name="password" auto-complete="on"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button @click="submitForm('ruleForm')" :loading="loading" size="medium" type="danger" class="login-button">登录</el-button>
@@ -28,13 +28,14 @@
       </div>
     </div>
     <el-footer class="login-footer">
-      <p>版权说明</p>
+      <p>{{$t("login.footer")}}</p>
     </el-footer>
   </div>
 
 </template>
 <script>
 
+import { login } from '@src/apis';
 import $ from "jquery";
 var backImgUrl = "@src/assets/images/LoginBackSmall.png"
 export default {
@@ -56,9 +57,6 @@ export default {
       ruleForm: {
         username: "",
         password: "",
-        username: "admin",
-        password: "123456",
-        verification: ""
       },
       modifyPwdForm: {
         passWordOrg: '',
@@ -99,14 +97,10 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: "请输入易票账号/手机号", trigger: "blur,change" },
-          { min: 3, max: 20, message: "长度在 3 到 20 个字符", trigger: "blur,change" }
+          { required: true, message: this.$t("login.form_username"), trigger: "blur,change" }
         ],
         password: [
-          { required: true, message: "请输入有效密码", trigger: "change" }
-        ],
-        verification: [
-          { required: true, message: "请输入验证码", trigger: "blur" }
+          { required: true, message: this.$t("login.form_pass"), trigger: "change" }
         ]
       }
     };
@@ -122,14 +116,14 @@ export default {
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           var data_ = this.ruleForm;
           this.loading = true;
           localStorage.setItem("isLogin", "100");
           location.reload();
+          this.loading = false;
         }
-        this.loading = false;
       });
     },
     verificImgReload() {

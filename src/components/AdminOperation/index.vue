@@ -1,18 +1,18 @@
 <template>
   <!-- 管理员信息操作 -->
   <div class="admin-operation-box hover-back">
-    <el-dropdown trigger="click" :show-timeout="0" :hide-timeout="0">
-      <span class="el-dropdown-link">
-        <div class="user-img">
+    <!-- <el-dropdown :show-timeout="0" :hide-timeout="0"> -->
+    <span class="el-dropdown-link" @click="escloginfn">
+      <!-- <div class="user-img">
           <img :src="require('@src/assets/images/logo.png')" alt="">
           <span></span>
-        </div>
-        <div class="user-text">
-          <i class="userimg"></i>{{userMsg.realname}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </div>
-      </span>
-      <el-dropdown-menu class="dropdown-menu" slot="dropdown">
+        </div> -->
+      <div class="user-text">
+        <i class="userimg"></i>{{$t("nav.exitText")}}
+        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
+      </div>
+    </span>
+    <!-- <el-dropdown-menu class="dropdown-menu" slot="dropdown">
         <el-dropdown-item @click.native="dialogFormVisiblefn">
           <div class="icon-back">
             <i class="iconfont icon-Password"></i>
@@ -31,8 +31,8 @@
           </div>
           <span class="icon-text">退出</span>
         </el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+      </el-dropdown-menu> -->
+    <!-- </el-dropdown> -->
     <!-- 管理员信息弹出框 -->
     <el-dialog center title="用户信息" :visible.sync="dialogUserVisible" :modal="ifmodal" :close-on-click-modal="ifmodalclose" :modal-append-to-body="ifappendbody" :append-to-body="ifappendbody" width="280px">
       <div class="detail-content">

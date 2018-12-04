@@ -13,7 +13,8 @@ const route404 = { path: "*", redirect: "/error" };
 
 // 业务模块
 import orderQuery from "./order/orderQuery";
-import userinfo from "./userinfo/userinfo";
+// import userinfo from "./userinfo/userinfo";
+import refund from "./refund";
 
 Vue.use(Router)
 const router = new Router({
@@ -25,8 +26,7 @@ const router = new Router({
 })
 
 const asyncRouter = [
-    ...orderQuery,
-    ...userinfo
+    ...refund
 ];
 
 function filterRouter(data, asyncRouter, back) {
