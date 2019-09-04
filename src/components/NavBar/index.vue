@@ -15,16 +15,20 @@
       <!-- 全屏显示 -->
       <i title="全屏显示" class="el-icon-rank fullpage-icont" @click="fullPageHandle()"></i>
 
-      <!-- 换肤 -->
-      <!-- <theme-picker class="theme-picker"></theme-picker> -->
-
       <!-- 通知 -->
+      <div v-popover:popover2 title="通知" class="hover-back message-box">
+        <el-badge :value="noticeCount" :max="999" class="item" id="messageIcon">
+          <span class="icon-news"></span>
+        </el-badge>
+      </div>
+
+      <!-- 通知 pop -->
       <el-popover popper-class="msg-tooltip" placement="bottom-start" ref="popover2" width="300" trigger="click">
         <el-tabs v-model="msgName" @tab-click="msgFn">
-          <el-tab-pane :label="$t('nav.noticeText')+'('+noticeCount+')'" name="notice">
+          <el-tab-pane :label="'通知'+'('+noticeCount+')'" name="notice">
             <div v-if="noticeCount>0?false:true" class="nomsg-box">
               <img :src="require('@src/assets/images/noNotice-pc.png')" alt="">
-              <p>{{$t("nav.noNoticeText")}}</p>
+              <p>暂无通知</p>
             </div>
             <div v-if="noticeCount>0?true:false" class="msg-list">
               <div v-for="(item,index) in noticeList" :key="index" class="list notice">
@@ -44,75 +48,104 @@
         </el-tabs>
       </el-popover>
 
-      <div v-popover:popover2 :title="$t('nav.noticeText')" class="hover-back message-box">
-        <el-badge :value="noticeCount" :max="999" class="item" id="messageIcon">
-          <span class="icon-news"></span>
-        </el-badge>
-      </div>
+      <!-- 用户信息 -->
+      <admin-operation></admin-operation>
 
-      <myp-admin-operation></myp-admin-operation>
-
-      <el-dropdown @command="command">
+      <!-- <el-dropdown @command="command">
         <span class="el-dropdown-link">{{{zh:"中文",en:"English"}[$i18n.locale]}}</span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="zh">中文</el-dropdown-item>
           <el-dropdown-item command="en">English</el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> -->
     </div>
 
   </div>
 </template>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang='scss'>
-// msg start
-.nomsg-box {
-  padding: 73px 0 88px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.45);
-}
-.msg-list {
-  .list {
-    padding: 10px 10px;
-  }
-  .notice {
-    border-bottom: 1px solid #eee;
-    display: flex;
-    align-items: stretch;
-    .icon-box {
-      font-size: 24px;
-      width: 40px;
-      flex-basis: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+
+<script>
+import screenfull from "screenfull";
+import TagsView from "@src/components/TagsView"; // 面包屑
+import AdminOperation from "@src/components/AdminOperation"; // 管理员信息操作
+export default {
+  name: "navbar",
+  components: {
+    TagsView,
+    AdminOperation
+  },
+  data() {
+    return {
+      msgName: 'notice',
+      noticeList: []
+    };
+  },
+  computed: {
+    isCollapseicon() {
+      //菜单是否收起
+      return this.$store.state.userInfoAndMenu.isCollapse;
+    },
+    noticeCount() {
+      return this.$store.state.acceptMessage.noticeCount;
+    },
+    noticeData() {
+      return this.$store.state.acceptMessage.noticeData;
     }
-    .content {
-      flex: 1;
-      .title {
+  },
+  created() {
+    this.noticeFn()
+  },
+  watch: {
+    noticeCount(value) {
+      // alert('有新通知！');
+      this.$nextTick(() => {
+      })
+    },
+    // 新通知内容
+    noticeData(val) {
+      this.noticeFn();
+    },
+  },
+  methods: {
+    command(e) {
+      this.$i18n.locale = e;
+      localStorage.setItem("lang", e);
+    },
+    isCollapsefn() {
+      this.$store.commit("SidebarHandle");
+    },
+    clearmgsFn() {
+      this.$store.commit("noticeClear");
+    },
+    noticeFn() {
+      let arr = [];
+      this.noticeData.forEach(item => {
+        let obj = JSON.parse(item.data);
+        arr.push({
+          content: JSON.parse(obj.content).data,
+          time: obj.triggerTime,
+          receiveBusinessNo: obj.receiveBusinessNo
+        })
+        this.noticeList = arr
+      });
+    },
+    // 全屏幕显示
+    fullPageHandle(element) {
+      if (!screenfull.enabled) {
+        this.$message({
+          message: "很抱歉，您的浏览器不支持次功能",
+          type: "warning"
+        });
+        return false;
       }
-      .time {
-        font-size: 12px;
-        padding: 5px 0;
-        color: rgba(0, 0, 0, 0.45);
-      }
+      screenfull.toggle();
+    },
+    msgFn(tab, event) {
     }
   }
-  .but {
-    text-align: center;
-    padding: 10px 0;
-    border-top: 1px solid #eee;
-    cursor: pointer;
-  }
-}
-.msg-tooltip {
-  padding: 0px !important;
-}
-.el-tabs__nav-scroll {
-  padding: 0 10px;
-}
-// msg end
-</style>
+};
+</script>
+
+
 <style lang='scss' scoped>
 /*重置样式*/
 @mixin my-transition($attr, $section) {
@@ -227,98 +260,52 @@
     display: none;
   }
 }
-</style>
 
-<script>
-import $ from "jquery";
-import screenfull from "screenfull";
-import TagsView from "@src/components/TagsView"; // 面包屑
-import ThemePicker from "@src/components/ThemePicker"; // 选色器
-import AdminOperation from "@src/components/AdminOperation"; // 管理员信息操作
-export default {
-  name: "navbar",
-  components: {
-    TagsView,
-    ThemePicker,
-    "myp-admin-operation": AdminOperation
-  },
-  data() {
-    return {
-      msgName: 'notice',
-      noticeList: []
-    };
-  },
-  computed: {
-    isCollapseicon() {
-      //菜单是否收起
-      return this.$store.state.userInfoAndMenu.isCollapse;
-    },
-    noticeCount() {
-      return this.$store.state.acceptMessage.noticeCount;
-    },
-    noticeData() {
-      return this.$store.state.acceptMessage.noticeData;
+// msg start
+.nomsg-box {
+  padding: 73px 0 88px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.45);
+}
+.msg-list {
+  .list {
+    padding: 10px 10px;
+  }
+  .notice {
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: stretch;
+    .icon-box {
+      font-size: 24px;
+      width: 40px;
+      flex-basis: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-  },
-  created() {
-    this.noticeFn()
-  },
-  watch: {
-    $route() {
-      this.$nextTick(() => {
-        if (this.$route.name == "message-list") {
-          $(".hover-back").addClass('active')
-        } else {
-          $(".hover-back").removeClass('active')
-        }
-      })
-    },
-    noticeCount(value) {
-      // alert('有新通知！');
-      this.$nextTick(() => {
-      })
-    },
-    // 新通知内容
-    noticeData(val) {
-      this.noticeFn();
-    },
-  },
-  methods: {
-    command(e) {
-      this.$i18n.locale = e;
-      localStorage.setItem("lang", e);
-    },
-    isCollapsefn() {
-      this.$store.commit("SidebarHandle");
-    },
-    clearmgsFn() {
-      this.$store.commit("noticeClear");
-    },
-    noticeFn() {
-      let arr = [];
-      this.noticeData.forEach(item => {
-        let obj = JSON.parse(item.data);
-        arr.push({
-          content: JSON.parse(obj.content).data,
-          time: obj.triggerTime,
-          receiveBusinessNo: obj.receiveBusinessNo
-        })
-        this.noticeList = arr
-      });
-    },
-    // 全屏幕显示
-    fullPageHandle(element) {
-      if (!screenfull.enabled) {
-        this.$message({
-          message: "很抱歉，您的浏览器不支持次功能",
-          type: "warning"
-        });
-        return false;
+    .content {
+      flex: 1;
+      .title {
       }
-      screenfull.toggle();
-    },
-    msgFn(tab, event) {
+      .time {
+        font-size: 12px;
+        padding: 5px 0;
+        color: rgba(0, 0, 0, 0.45);
+      }
     }
   }
-};
-</script>
+  .but {
+    text-align: center;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+    cursor: pointer;
+  }
+}
+.msg-tooltip {
+  padding: 0px !important;
+}
+.el-tabs__nav-scroll {
+  padding: 0 10px;
+}
+// msg end
+</style>

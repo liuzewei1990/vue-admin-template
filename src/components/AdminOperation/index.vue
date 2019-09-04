@@ -1,18 +1,18 @@
 <template>
   <!-- 管理员信息操作 -->
   <div class="admin-operation-box hover-back">
-    <!-- <el-dropdown :show-timeout="0" :hide-timeout="0"> -->
-    <span class="el-dropdown-link" @click="escloginfn">
-      <!-- <div class="user-img">
+    <el-dropdown :show-timeout="0" :hide-timeout="0" trigger="click">
+      <div class="el-dropdown-link">
+        <div class="user-img">
           <img :src="require('@src/assets/images/logo.png')" alt="">
           <span></span>
-        </div> -->
-      <div class="user-text">
-        <i class="userimg"></i>{{$t("nav.exitText")}}
-        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
+        </div>
+        <div class="user-text">
+          <i class="userimg"></i>{{userMsg.realname}}
+          <i class="el-icon-arrow-down el-icon--right"></i>
+        </div>
       </div>
-    </span>
-    <!-- <el-dropdown-menu class="dropdown-menu" slot="dropdown">
+      <el-dropdown-menu class="dropdown-menu" slot="dropdown">
         <el-dropdown-item @click.native="dialogFormVisiblefn">
           <div class="icon-back">
             <i class="iconfont icon-Password"></i>
@@ -31,8 +31,8 @@
           </div>
           <span class="icon-text">退出</span>
         </el-dropdown-item>
-      </el-dropdown-menu> -->
-    <!-- </el-dropdown> -->
+      </el-dropdown-menu>
+    </el-dropdown>
     <!-- 管理员信息弹出框 -->
     <el-dialog center title="用户信息" :visible.sync="dialogUserVisible" :modal="ifmodal" :close-on-click-modal="ifmodalclose" :modal-append-to-body="ifappendbody" :append-to-body="ifappendbody" width="280px">
       <div class="detail-content">
@@ -65,7 +65,113 @@
     <!-- 修改管理员密码 end -->
   </div>
 </template>
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
+<script>
+export default {
+  name: "AdminOperation",
+  data () {
+    var oldPass = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("密码不能为空"));
+      } else {
+        callback();
+      }
+    };
+    var newPass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入新密码"));
+      } else if (value.length < 6 || value.length > 12) {
+        callback(new Error("密码长度必须6到12位!"));
+      } else if (value === this.resetPwform.oldPassword) {
+        callback(new Error("新密码与旧密码不允许相同!"));
+      } else {
+        callback();
+      }
+    };
+    var confirmPass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请确认新密码"));
+      } else if (value !== this.resetPwform.password) {
+        callback(new Error("输入的新密码请保持一致!"));
+      } else {
+        callback();
+      }
+    };
+    return {
+      closeVisible: true,//关闭按钮
+      defaultPickerColor: "#00c1df",
+      realname: "",
+      dialogUserVisible: false, //管理员信息弹出框
+      dialogFormVisible: false, // 密码修改窗口显示
+      ifmodalclose: false, // 点击modal是否关闭
+      ifmodal: true, //弹出框是否需要遮罩
+      ifappendbody: true,
+      formLabelWidth: "80px", //密码修改窗口大小
+      resetPwform: {
+        oldPassword: "", // 旧密码
+        password: "", //新密码
+        repassword: "" //确认密码
+      },
+      passwordRules: {
+        oldPassword: [{ validator: oldPass, trigger: "blur,change" }],
+        password: [{ validator: newPass, trigger: "blur,change" }],
+        repassword: [{ validator: confirmPass, trigger: "blur,change" }]
+      }
+    };
+  },
+
+  methods: {
+
+    dialogUserVisiblefn () {
+      // 管理员信息弹出框
+      this.dialogUserVisible = true;
+    },
+    dialogFormVisiblefn () {
+      // 修改密码弹出框
+      this.dialogFormVisible = true;
+      this.closeVisible = true;
+    },
+    submitFormfn (formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("调用接口");
+        } else {
+          return false;
+        }
+      });
+    },
+    escloginfn () {
+      localStorage.setItem("isLogin", "0");
+      window.location.reload();
+    },
+    resetFormfn (formName) {
+      this.$refs[formName].resetFields();
+      this.dialogFormVisible = false;
+    },
+    // 按钮权限
+    adminFilter (fileterName) {
+      let fileter = this.$store.state.userInfoAndMenu.userMessage.all[fileterName]
+      if (fileter == "TRUE") {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
+  computed: {
+    userMsg () {
+      return this.$store.state.userInfoAndMenu.userMessage;
+    }
+  },
+  mounted () {
+    if (this.adminFilter('resetPasswordStatus')) {
+      this.closeVisible = false;
+      this.dialogFormVisible = true;
+    }
+  }
+};
+</script>
+
 <style lang='scss' scoped>
 @mixin my-transition($attr, $section) {
   transition: $attr $section;
@@ -170,108 +276,3 @@
   }
 }
 </style>
-<script>
-export default {
-  name: "AdminOperation",
-  data() {
-    var oldPass = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("密码不能为空"));
-      } else {
-        callback();
-      }
-    };
-    var newPass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入新密码"));
-      } else if (value.length < 6 || value.length > 12) {
-        callback(new Error("密码长度必须6到12位!"));
-      } else if (value === this.resetPwform.oldPassword) {
-        callback(new Error("新密码与旧密码不允许相同!"));
-      } else {
-        callback();
-      }
-    };
-    var confirmPass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请确认新密码"));
-      } else if (value !== this.resetPwform.password) {
-        callback(new Error("输入的新密码请保持一致!"));
-      } else {
-        callback();
-      }
-    };
-    return {
-      closeVisible: true,//关闭按钮
-      defaultPickerColor: "#00c1df",
-      realname: "",
-      dialogUserVisible: false, //管理员信息弹出框
-      dialogFormVisible: false, // 密码修改窗口显示
-      ifmodalclose: false, // 点击modal是否关闭
-      ifmodal: true, //弹出框是否需要遮罩
-      ifappendbody: true,
-      formLabelWidth: "80px", //密码修改窗口大小
-      resetPwform: {
-        oldPassword: "", // 旧密码
-        password: "", //新密码
-        repassword: "" //确认密码
-      },
-      passwordRules: {
-        oldPassword: [{ validator: oldPass, trigger: "blur,change" }],
-        password: [{ validator: newPass, trigger: "blur,change" }],
-        repassword: [{ validator: confirmPass, trigger: "blur,change" }]
-      }
-    };
-  },
-
-  methods: {
-
-    dialogUserVisiblefn() {
-      // 管理员信息弹出框
-      this.dialogUserVisible = true;
-    },
-    dialogFormVisiblefn() {
-      // 修改密码弹出框
-      this.dialogFormVisible = true;
-      this.closeVisible = true;
-    },
-    submitFormfn(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("调用接口");
-        } else {
-          return false;
-        }
-      });
-    },
-    escloginfn() {
-      localStorage.setItem("isLogin", "0");
-      window.location.reload();
-    },
-    resetFormfn(formName) {
-      this.$refs[formName].resetFields();
-      this.dialogFormVisible = false;
-    },
-    // 按钮权限
-    adminFilter(fileterName) {
-      let fileter = this.$store.state.userInfoAndMenu.userMessage.all[fileterName]
-      if (fileter == "TRUE") {
-        return true
-      } else {
-        return false
-      }
-    }
-  },
-  computed: {
-    userMsg() {
-      return this.$store.state.userInfoAndMenu.userMessage;
-    }
-  },
-  mounted() {
-    if (this.adminFilter('resetPasswordStatus')) {
-      this.closeVisible = false;
-      this.dialogFormVisible = true;
-    }
-  }
-};
-</script>

@@ -1,9 +1,9 @@
 <template>
   <div class="welcome-page">
     <div class="welcome">
-      <h2>{{$t("home.title")}}</h2>
+      <h2>欢迎使用中付支付退款系统</h2>
       <ul>
-        <li v-for="(item,index) in $t('home.introduce')" :key="index">{{item}}</li>
+        <li v-for="(item,index) in introduce" :key="index">{{item}}</li>
       </ul>
     </div>
     <div class="img-box">
@@ -14,23 +14,24 @@
 <script>
 export default {
   name: "home",
-  data() {
+  data () {
     return {
       menuList: "", // 菜单数据
       isrouter: true, // 开启路由
       isCollapse: false, // 菜单收起
       docUrl: "", // 操作手册下载地址
       downloadPower: false,
+      introduce: ["中付支付退款系统目前只支持全额退款", "退款至银行卡，具体到账时间以银行为准"]
       // introduce: this.$t('home.introduce')
     };
   },
-  mounted() {
+  mounted () {
   },
   methods: {
-    handleOpen(key, keyPath) {
+    handleOpen (key, keyPath) {
       console.log(key, keyPath);
     },
-    handleClose(key, keyPath) {
+    handleClose (key, keyPath) {
       console.log(key, keyPath);
     },
   }

@@ -27,7 +27,7 @@ axios.interceptors.response.use(function (response) {
             }, 100);
             return {
                 code: -103,
-                msg: "用户过期，请重新登录"
+                msg: "登录过期，请重新登录"
             };
         }
         return response.data;
@@ -58,7 +58,7 @@ axios.interceptors.response.use(function (response) {
     } else {
         return Promise.resolve({
             code: -101,
-            msg: "未知错误！ERROR_CODE:" + error.code,
+            msg: error.message,
         });
     }
 })
@@ -101,8 +101,40 @@ export default {
             params: params,
             timeout: 10000,
             headers: {
+                "X-Requested-With": "XMLHttpRequest",
                 ...headers
             }
         })
-    }
+    },
+    delete: function (baseURL, url, params) {
+        return axios({
+            method: "DELETE",
+            url: url,
+            baseURL: baseURL,
+            params: params,
+            timeout: 30000,
+            // headers: {
+            //           "X-requested-With": "XMLHttpRequest"
+            // }
+        })
+    },
+    patch: function (baseURL, url, params) {
+        return axios({
+            method: "PATCH",
+            url: url,
+            baseURL: baseURL,
+            // params: params,
+            data: qs.stringify(params),
+            timeout: 30000,
+            // headers: {
+            //     "Content-Type": ""
+            // }
+            // headers: {
+            //     'Content-Type': 'multipart/form-data'
+            //使用form表单进行数据交互
+            // "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            // "Content-Type": "application/json;charset=UTF-8"
+            // },
+        })
+    },
 }

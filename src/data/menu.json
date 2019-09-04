@@ -12,5 +12,19 @@
         "menuName": "退款查询"
       }
     ]
+  },
+  {
+    "menuCode": "order1",
+    "menuName": "用户管理",
+    "child": [
+      {
+        "menuCode": "customerInfo",
+        "menuName": "商户信息"
+      },
+      {
+        "menuCode": "productInfo",
+        "menuName": "产品费率"
+      }
+    ]
   }
 ]

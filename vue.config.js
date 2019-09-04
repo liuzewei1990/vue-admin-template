@@ -123,7 +123,7 @@ module.exports = {
         https: false,
         hotOnly: false,
         //配置跨域处理,只有一个代理
-        proxy: 'https://tm.yeepiao.com',
+        proxy: 'http://tm.yeepiao.com',
         //配置跨域处理,多个代理
         // disableHostCheck: true,
         // proxy: {

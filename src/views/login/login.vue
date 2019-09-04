@@ -8,16 +8,16 @@
           <div class="logo-box">
             <img src="../../assets/images/logo.png" alt="">
           </div>
-          <div class="slogen-box">{{$t("login.title")}}</div>
+          <div class="slogen-box">中付支付</div>
         </header>
         <!-- form start -->
         <div class="login-form">
           <el-form v-if="loginVisible" :model="ruleForm" :rules="rules" ref="ruleForm" label-position="top" label-width="100px" class="demo-ruleForm form-r">
             <el-form-item prop="username">
-              <el-input class="input-reset" v-model="ruleForm.username" prefix-icon :placeholder="$t('login.form_username')" name="username" auto-complete="on"></el-input>
+              <el-input class="input-reset" v-model="ruleForm.username" prefix-icon placeholder="请输入机构编号" name="username" auto-complete="on"></el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input class="input-reset" v-model="ruleForm.password" :placeholder="$t('login.form_pass')" type="password" name="password" auto-complete="on"></el-input>
+              <el-input class="input-reset" v-model="ruleForm.password" placeholder="请输入机构密钥" type="password" name="password" auto-complete="on"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button @click="submitForm('ruleForm')" :loading="loading" size="medium" type="danger" class="login-button">登录</el-button>
@@ -28,7 +28,7 @@
       </div>
     </div>
     <el-footer class="login-footer">
-      <p>{{$t("login.footer")}}</p>
+      <p>CHINA PAYMENT TECHNOLOGY CO., LTD</p>
     </el-footer>
   </div>
 
@@ -40,7 +40,7 @@ import $ from "jquery";
 var backImgUrl = "@src/assets/images/LoginBackSmall.png"
 export default {
   name: "Login",
-  data() {
+  data () {
     return {
       modifyPwdVisible: false,// 修改密码界面
       loginVisible: true,// 登录界面
@@ -97,15 +97,15 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: this.$t("login.form_username"), trigger: "blur,change" }
+          { required: true, message: "请输入机构编号", trigger: "blur,change" }
         ],
         password: [
-          { required: true, message: this.$t("login.form_pass"), trigger: "change" }
+          { required: true, message: "请输入机构密钥", trigger: "change" }
         ]
       }
     };
   },
-  mounted() {
+  mounted () {
     document.onkeydown = event => {
       var e = event || window.event || arguments.callee.caller.arguments[0];
       if (e && e.keyCode == 13) {
@@ -115,30 +115,41 @@ export default {
     this.verificImgReload();
   },
   methods: {
-    submitForm(formName) {
+    submitForm (formName) {
       this.$refs[formName].validate(async valid => {
         if (valid) {
-          var data_ = this.ruleForm;
           this.loading = true;
-          localStorage.setItem("isLogin", "100");
-          location.reload();
+          let data = await login(this.ruleForm);
+          if (data.code == "98") {
+            this.$message({
+              type: "warning",
+              message: data.msg
+            });
+          } else if (data.code == "00") {
+            // 登录成功
+            localStorage.setItem("isLogin", "100");
+            location.reload();
+          } else {
+            // console.log(data);
+            this.$message.error(data.msg);
+          }
           this.loading = false;
         }
       });
     },
-    verificImgReload() {
+    verificImgReload () {
       this.verificImgSrc = `${this.oaIpZf + '/customerAdmin/code?' + Math.random()}`;
     },
-    enterHandle() {
+    enterHandle () {
       this.$nextTick(() => {
         $(".login-button").click();
       });
     },
-    resetForm(formName) {
+    resetForm (formName) {
       this.$refs[formName].resetFields();
     }
   },
-  created() {
+  created () {
     console.log(process.env.NODE_ENV);
   }
 };

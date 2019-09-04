@@ -13,7 +13,7 @@
   <!-- </div> -->
 </template>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style lang="scss" scoped>
 .scroll-container {
   white-space: nowrap;
   position: relative;
