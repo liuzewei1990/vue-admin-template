@@ -8,7 +8,7 @@
     "build:test": "vue-cli-service build --mode productionTest"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "element-ui": "^2.4.4",
     "iscroll": "^5.2.0",
     "jquery": "^3.3.1",
